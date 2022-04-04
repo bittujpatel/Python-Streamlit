@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
-import plotly.express as px
+import matplotlib.pyplot as plt
 
 DATA_URL = (
     "https://data.cityofnewyork.us/resource/h9gi-nx95.csv"
@@ -71,7 +71,7 @@ filtered = data[
 hist = np.histogram(filtered[DATE_TIME].dt.minute, bins=60, range=(0, 60))[0]
 chart_data = pd.DataFrame({"minute": range(60), "crashes": hist})
 
-fig = px.bar(chart_data, x='minute', y='crashes', hover_data=['minute', 'crashes'], height=400)
+fig = plt.bar(chart_data, x='minute', y='crashes', hover_data=['minute', 'crashes'], height=400)
 st.write(fig)
 
 st.header("Top 5 dangerous streets by affected class")
