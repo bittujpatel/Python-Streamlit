@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 DATA_URL = (
     "https://data.cityofnewyork.us/resource/h9gi-nx95.csv"
@@ -23,7 +23,7 @@ def load_data(nrows):
     #data = data[['date/time', 'latitude', 'longitude']]
     return data
 
-data = load_data(15000)
+data = load_data(100000)
 data[['latitude','longitude']].to_csv('lat_long.csv', index=False)
 
 DATE_TIME = "date/time"
@@ -71,8 +71,8 @@ filtered = data[
 hist = np.histogram(filtered[DATE_TIME].dt.minute, bins=60, range=(0, 60))[0]
 chart_data = pd.DataFrame({"minute": range(60), "crashes": hist})
 
-fig = plt.bar(chart_data, x='minute', y='crashes', hover_data=['minute', 'crashes'], height=400)
-st.write(fig)
+#fig = plt.bar(chart_data, x='minute', y='crashes', hover_data=['minute', 'crashes'], height=400)
+#st.write(fig)
 
 st.header("Top 5 dangerous streets by affected class")
 select = st.selectbox('Affected class', ['Pedestrians', 'Cyclists', 'Motorists'])
