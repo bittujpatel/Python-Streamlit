@@ -4,7 +4,6 @@ import numpy as np
 import pydeck as pdk
 # import plotly.express as px
 
-DATE_TIME = "date/time"
 DATA_URL = (
     "https://data.cityofnewyork.us/resource/h9gi-nx95.csv"
 )
@@ -16,8 +15,8 @@ st.markdown("This application is a Streamlit dashboard that can be used "
 
 @st.cache(persist=True)
 def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows, parse_dates=[['CRASH_DATE', 'CRASH_TIME']])
-    data.dropna(subset=['LATITUDE', 'LONGITUDE'], inplace=True)
+    data = pd.read_csv(DATA_URL, nrows=nrows, parse_dates=[['crash_date', 'crash_time']])
+    data.dropna(subset=['latitude', 'longitude'], inplace=True)
     lowercase = lambda x: str(x).lower()
     data.rename(lowercase, axis="columns", inplace=True)
     data.rename(columns={"crash_date_crash_time": "date/time"}, inplace=True)
@@ -27,10 +26,10 @@ def load_data(nrows):
 data = load_data(15000)
 data[['latitude','longitude']].to_csv('lat_long.csv', index=False)
 
-
+DATE_TIME = "date/time"
 st.header("Where are the most people injured in NYC?")
 injured_people = st.slider("Number of persons injured in vehicle collisions", 0, 19)
-st.map(data.query("injured_persons >= @injured_people")[["latitude", "longitude"]].dropna(how="any"))
+st.map(data.query("number_of_persons_injured >= @injured_people")[["latitude", "longitude"]].dropna(how="any"))
 
 st.header("How many collisions occur during a given time of day?")
 hour = st.slider("Hour to look at", 0, 23)
@@ -79,10 +78,10 @@ st.header("Top 5 dangerous streets by affected class")
 select = st.selectbox('Affected class', ['Pedestrians', 'Cyclists', 'Motorists'])
 
 if select == 'Pedestrians':
-    st.write(original_data.query("injured_pedestrians >= 1")[["on_street_name", "injured_pedestrians"]].sort_values(by=['injured_pedestrians'], ascending=False).dropna(how="any")[:5])
+    st.write(original_data.query("number_of_pedestrians_injured >= 1")[["on_street_name", "number_of_pedestrians_injured"]].sort_values(by=['number_of_pedestrians_injured'], ascending=False).dropna(how="any")[:5])
 
 elif select == 'Cyclists':
-    st.write(original_data.query("injured_cyclists >= 1")[["on_street_name", "injured_cyclists"]].sort_values(by=['injured_cyclists'], ascending=False).dropna(how="any")[:5])
+    st.write(original_data.query("number_of_cyclist_injured >= 1")[["on_street_name", "number_of_cyclist_injured"]].sort_values(by=['number_of_cyclist_injured'], ascending=False).dropna(how="any")[:5])
 
 else:
-    st.write(original_data.query("injured_motorists >= 1")[["on_street_name", "injured_motorists"]].sort_values(by=['injured_motorists'], ascending=False).dropna(how="any")[:5])
+    st.write(original_data.query("number_of_motorist_injured >= 1")[["on_street_name", "number_of_motorist_injured"]].sort_values(by=['number_of_motorist_injured'], ascending=False).dropna(how="any")[:5])
