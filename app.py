@@ -23,7 +23,7 @@ def load_data(nrows):
     #data = data[['date/time', 'latitude', 'longitude']]
     return data
 
-data = load_data(100000)
+data = load_data(200000)
 data[['latitude','longitude']].to_csv('lat_long.csv', index=False)
 
 DATE_TIME = "date/time"
